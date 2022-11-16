@@ -16,6 +16,7 @@
 				position: relative;
 				/** More li styles **/
 			}
+
 			ol.example li.placeholder:before {
 				position: absolute;
 				/** Define arrowhead **/
@@ -25,14 +26,58 @@
 	<body>
 		<ol class='example'>
 			<li>First</li>
-			<li>Second</li>
+			<li>Second
+				<ol>
+					<li>2-1</li>
+					<li>2-2</li>
+					<li>2-3</li>
+				</ol>
+			</li>
 			<li>Third</li>
-		  </ol>
+			<li>Forth
+				<ol>
+					<li>4-1
+						<ol>
+							<li>4-1-1</li>
+							<li>4-1-2</li>
+							<li>4-1-3</li>
+							<li>4-1-4</li>
+						</ol>
+					</li>
+					<li>4-2</li>
+				</ol>
+			</li>
+		</ol>
 		<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 		<script src="jquery-sortable.js"></script>
 		<script>
 			$(function  () {
-				$("ol.example").sortable();
+				$("ol.example").sortable({
+					handle: 'li',
+					onDragStart: ($item, container, _super, event) => {
+						$item.css({
+							height: $item.outerHeight(),
+							width: $item.outerWidth()
+						})
+
+						$item.addClass(container.group.options.draggedClass);
+						$("body").addClass(container.group.options.bodyClass);
+						console.log(container.el[0]);
+					},
+					onDrop: ($item, container, _super, event) =>{
+						$item.removeClass(container.group.options.draggedClass).removeAttr("style");
+  						$("body").removeClass(container.group.options.bodyClass);
+						console.log($item);
+						console.log(container.el[0]);
+						
+					},
+					// isValidTarget: ($item, container) => {
+					// 	console.log($item);
+					// 	console.log(container);
+					// }
+				});
+
+				$("ol.example").sortable('refresh');
 			});
 		</script>
 	</body>
