@@ -24,19 +24,19 @@
 		</style>
 	</head>
 	<body>
-		<ol class='example'>
-			<li>First</li>
-			<li>Second
+		<ol id='totalList' class='example'>
+			<li data-group="1000">First</li>
+			<li data-group="1001">Second
 				<ol>
 					<li>2-1</li>
 					<li>2-2</li>
 					<li>2-3</li>
 				</ol>
 			</li>
-			<li>Third</li>
-			<li>Forth
+			<li data-group="1002">Third</li>
+			<li data-group="1003">Forth
 				<ol>
-					<li>4-1
+					<li data-group="10035">4-1
 						<ol>
 							<li>4-1-1</li>
 							<li>4-1-2</li>
@@ -44,40 +44,42 @@
 							<li>4-1-4</li>
 						</ol>
 					</li>
-					<li>4-2</li>
 				</ol>
 			</li>
 		</ol>
 		<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 		<script src="jquery-sortable.js"></script>
 		<script>
+			let originalGroup = '';
+			let originalHtml = $('#totalList').html();
+
 			$(function  () {
 				$("ol.example").sortable({
 					handle: 'li',
 					onDragStart: ($item, container, _super, event) => {
+						originalHtml = $('#totalList').html();
+
 						$item.css({
 							height: $item.outerHeight(),
 							width: $item.outerWidth()
-						})
+						});
 
 						$item.addClass(container.group.options.draggedClass);
 						$("body").addClass(container.group.options.bodyClass);
-						console.log(container.el[0]);
+						
+						originalGroup = $item.parent().closest('li').data('group');
 					},
 					onDrop: ($item, container, _super, event) =>{
-						$item.removeClass(container.group.options.draggedClass).removeAttr("style");
-  						$("body").removeClass(container.group.options.bodyClass);
-						console.log($item);
-						console.log(container.el[0]);
-						
-					},
-					// isValidTarget: ($item, container) => {
-					// 	console.log($item);
-					// 	console.log(container);
-					// }
-				});
+						if(originalGroup == $item.parent().closest('li').data('group')){
 
-				$("ol.example").sortable('refresh');
+							$item.removeClass(container.group.options.draggedClass).removeAttr("style");
+  							$("body").removeClass(container.group.options.bodyClass);
+						} else {
+							$('#totalList').empty();
+							$(originalHtml).appendTo($('#totalList'));
+						}
+					}
+				});
 			});
 		</script>
 	</body>
