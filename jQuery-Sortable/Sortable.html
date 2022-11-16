@@ -1,10 +1,39 @@
 <html>
 	<head>
 		<title>jQuery sortable plugin test</title>
+		<style>
+			body.dragging, body.dragging * {
+				cursor: move !important;
+			}
+
+			.dragged {
+				position: absolute;
+				opacity: 0.5;
+				z-index: 2000;
+			}
+
+			ol.example li.placeholder {
+				position: relative;
+				/** More li styles **/
+			}
+			ol.example li.placeholder:before {
+				position: absolute;
+				/** Define arrowhead **/
+			}
+		</style>
 	</head>
 	<body>
-		Test..
+		<ol class='example'>
+			<li>First</li>
+			<li>Second</li>
+			<li>Third</li>
+		  </ol>
 		<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 		<script src="jquery-sortable.js"></script>
+		<script>
+			$(function  () {
+				$("ol.example").sortable();
+			});
+		</script>
 	</body>
 </html>
